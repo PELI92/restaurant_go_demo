@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V1__create_addresses.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V2__create_restaurants.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V3__create_categories.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V4__create_products.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V5__create_restaurant_categories.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V6__create_product_categories.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V7__create_opening_hours.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/flyway/sql/V8__create_special_clousures.sql" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="MySQL" />
+  </component>
+</project>

@@ -1,0 +1,402 @@
+basePath: /api/v1
+definitions:
+  model.Product:
+    properties:
+      description:
+        description: |-
+          Description gives a human-readable summary of the product.
+          example: "Ergonomic wireless mouse with adjustable DPI and long battery life."
+        type: string
+      id:
+        description: |-
+          ID is the unique identifier for the product.
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        type: string
+      url:
+        description: |-
+          URL is the link to the product resource or image.
+          example: "https://example.com/api/products/123e4567-e89b-12d3-a456-426614174000"
+        type: string
+    type: object
+  model.Restaurant:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      interval_in_seconds:
+        type: string
+      is_active:
+        type: boolean
+      tags:
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: string
+      url:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is the REST API for managing restaurants & products.
+  title: Restaurant API
+  version: "1.0"
+paths:
+  /ping:
+    get:
+      responses: {}
+      tags:
+      - Health
+  /product:
+    post:
+      consumes:
+      - application/json
+      description: Receives product details and creates a new product record.
+      parameters:
+      - description: Product to create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Product'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new product
+      tags:
+      - products
+  /product/{id}:
+    delete:
+      description: Deletes the product identified by the given ID.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Product not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a product by ID
+      tags:
+      - products
+    get:
+      description: Retrieves the product identified by the given ID.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Product not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a product by ID
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Updates the product identified by the given ID with new data.
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated product data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Product'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Product'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Product not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a product by ID
+      tags:
+      - products
+  /products:
+    get:
+      description: Retrieves a list of products.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Product'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all products
+      tags:
+      - products
+  /restaurant:
+    post:
+      consumes:
+      - application/json
+      description: Receives restaurant details and creates a new record.
+      parameters:
+      - description: Restaurant to create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Restaurant'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/model.Restaurant'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new restaurant
+      tags:
+      - restaurants
+  /restaurant/{id}:
+    delete:
+      description: Deletes the restaurant identified by the given ID.
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Restaurant not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a restaurant by ID
+      tags:
+      - restaurants
+    get:
+      description: Retrieves the restaurant identified by the given ID.
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Restaurant'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Restaurant not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a restaurant by ID
+      tags:
+      - restaurants
+    put:
+      consumes:
+      - application/json
+      description: Updates the restaurant identified by the given ID.
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated restaurant data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Restaurant'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Restaurant'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Restaurant not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a restaurant by ID
+      tags:
+      - restaurants
+  /restaurants:
+    get:
+      description: Retrieves a list of restaurants.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Restaurant'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all restaurants
+      tags:
+      - restaurants
+swagger: "2.0"
