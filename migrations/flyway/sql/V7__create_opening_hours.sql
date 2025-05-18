@@ -5,4 +5,4 @@ CREATE TABLE opening_hours (
     open_time TIME NOT NULL,
     close_time TIME NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
-);              
+);

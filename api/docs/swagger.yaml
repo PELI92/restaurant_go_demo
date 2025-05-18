@@ -1,24 +1,141 @@
 basePath: /api/v1
 definitions:
-  model.Product:
+  address.AddressResponse:
     properties:
-      description:
-        description: |-
-          Description gives a human-readable summary of the product.
-          example: "Ergonomic wireless mouse with adjustable DPI and long battery life."
+      city:
+        type: string
+      country:
+        type: string
+      created_at:
         type: string
       id:
-        description: |-
-          ID is the unique identifier for the product.
-          example: "123e4567-e89b-12d3-a456-426614174000"
         type: string
-      url:
-        description: |-
-          URL is the link to the product resource or image.
-          example: "https://example.com/api/products/123e4567-e89b-12d3-a456-426614174000"
+      postal_code:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+      updated_at:
+        type: string
+    required:
+    - created_at
+    - id
+    - updated_at
+    type: object
+  address.CreateAddressRequest:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      postal_code:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+    required:
+    - city
+    - country
+    - postal_code
+    - state
+    - street
+    type: object
+  address.UpdateAddressRequest:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      postal_code:
+        type: string
+      state:
+        type: string
+      street:
+        type: string
+    required:
+    - city
+    - country
+    - postal_code
+    - state
+    - street
+    type: object
+  dto.CreateRestaurantRequest:
+    properties:
+      address:
+        $ref: '#/definitions/address.CreateAddressRequest'
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      website:
+        type: string
+    required:
+    - email
+    - name
+    - phone
+    type: object
+  dto.RestaurantResponse:
+    properties:
+      address:
+        $ref: '#/definitions/address.AddressResponse'
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      status:
+        type: integer
+      updated_at:
+        type: string
+      website:
+        type: string
+    required:
+    - created_at
+    - email
+    - name
+    - phone
+    - status
+    - updated_at
+    type: object
+  dto.UpdateRestaurantRequest:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      status:
+        type: string
+      website:
         type: string
     type: object
-  model.Restaurant:
+  product.CreateProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      restaurant_id:
+        type: string
+    required:
+    - description
+    - name
+    - price
+    - restaurant_id
+    type: object
+  product.ProductResponse:
     properties:
       created_at:
         type: string
@@ -26,17 +143,32 @@ definitions:
         type: string
       id:
         type: string
-      interval_in_seconds:
+      name:
         type: string
-      is_active:
-        type: boolean
-      tags:
-        items:
-          type: string
-        type: array
+      price:
+        type: integer
+      restaurant_id:
+        type: string
       updated_at:
         type: string
-      url:
+    required:
+    - created_at
+    - description
+    - id
+    - name
+    - price
+    - restaurant_id
+    - updated_at
+    type: object
+  product.UpdateProductRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      restaurant_id:
         type: string
     type: object
 host: localhost:8080
@@ -46,6 +178,196 @@ info:
   title: Restaurant API
   version: "1.0"
 paths:
+  /address:
+    post:
+      consumes:
+      - application/json
+      description: Receives address details and creates a new record for a restaurant.
+      parameters:
+      - description: Address to create
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.CreateAddressRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/address.AddressResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new address
+      tags:
+      - addresses
+  /address/{id}:
+    delete:
+      description: Deletes the address identified by the given address ID.
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Deleted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Address not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete an address by ID
+      tags:
+      - addresses
+    get:
+      description: Retrieves the address identified by the given address ID.
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.AddressResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Address not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get an address by ID
+      tags:
+      - addresses
+    put:
+      consumes:
+      - application/json
+      description: Updates the address identified by the given address ID.
+      parameters:
+      - description: Address ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated address data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/address.UpdateAddressRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.AddressResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Address not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an address by ID
+      tags:
+      - addresses
+  /address/restaurant/{restaurant_id}:
+    get:
+      description: Retrieves the address associated with the given restaurant ID.
+      parameters:
+      - description: Restaurant ID
+        in: path
+        name: restaurant_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/address.AddressResponse'
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Address not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get an address by restaurant ID
+      tags:
+      - addresses
   /ping:
     get:
       responses: {}
@@ -55,21 +377,21 @@ paths:
     post:
       consumes:
       - application/json
-      description: Receives product details and creates a new product record.
+      description: Receives product details and creates a new record.
       parameters:
       - description: Product to create
         in: body
         name: input
         required: true
         schema:
-          $ref: '#/definitions/model.Product'
+          $ref: '#/definitions/product.CreateProductRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/product.ProductResponse'
         "400":
           description: Bad request
           schema:
@@ -138,7 +460,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/product.ProductResponse'
         "400":
           description: Bad request
           schema:
@@ -163,7 +485,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Updates the product identified by the given ID with new data.
+      description: Updates the product identified by the given ID.
       parameters:
       - description: Product ID
         in: path
@@ -175,14 +497,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/model.Product'
+          $ref: '#/definitions/product.UpdateProductRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/product.ProductResponse'
         "400":
           description: Bad request
           schema:
@@ -206,16 +528,24 @@ paths:
       - products
   /products:
     get:
-      description: Retrieves a list of products.
+      description: Retrieves a paginated list of products.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.Product'
-            type: array
+            additionalProperties: true
+            type: object
         "500":
           description: Internal server error
           schema:
@@ -236,14 +566,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/model.Restaurant'
+          $ref: '#/definitions/dto.CreateRestaurantRequest'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/model.Restaurant'
+            $ref: '#/definitions/dto.RestaurantResponse'
         "400":
           description: Bad request
           schema:
@@ -312,7 +642,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Restaurant'
+            $ref: '#/definitions/dto.RestaurantResponse'
         "400":
           description: Bad request
           schema:
@@ -349,14 +679,14 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/model.Restaurant'
+          $ref: '#/definitions/dto.UpdateRestaurantRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Restaurant'
+            $ref: '#/definitions/dto.RestaurantResponse'
         "400":
           description: Bad request
           schema:
@@ -380,16 +710,24 @@ paths:
       - restaurants
   /restaurants:
     get:
-      description: Retrieves a list of restaurants.
+      description: Retrieves a paginated list of restaurants.
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Page size
+        in: query
+        name: size
+        type: integer
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/model.Restaurant'
-            type: array
+            additionalProperties: true
+            type: object
         "500":
           description: Internal server error
           schema:

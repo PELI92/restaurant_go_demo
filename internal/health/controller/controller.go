@@ -1,7 +1,7 @@
-package controller
+package health
 
 import (
-	"demo/internal/ping/service"
+	"demo/internal/health/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,7 +13,7 @@ type PingResponse struct {
 // Ping
 // @Tags	Health
 // @Router	/ping [get]
-func Ping(c *gin.Context) {
+func ping(c *gin.Context) {
 	response := service.GetPing()
 	c.JSON(http.StatusOK, PingResponse{Message: response})
 }

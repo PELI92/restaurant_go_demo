@@ -1,32 +1,35 @@
 package service
 
 import (
-	errors "demo/api/error"
-	"demo/internal/product/model"
+	"context"
+	api_errors "demo/api/error"
+	"demo/internal/product/service/domain"
+	"demo/internal/product/service/param"
 	"fmt"
+	"github.com/google/uuid"
 )
 
-func CreateProduct(input model.Product) (model.Product, *errors.APIError) {
-	fmt.Printf("CreateProduct: %+v\n", input)
-	return input, nil
+func CreateProduct(ctx context.Context, param param.CreateProductParam) (domain.Product, *api_errors.APIError) {
+	fmt.Printf("CreateProduct: %+v\n", param)
+	return domain.Product{}, nil
 }
 
-func GetProducts(id string) ([]model.Product, *errors.APIError) {
-	fmt.Printf("CreateProduct: %s\n", id)
-	return []model.Product{}, nil
+func GetProductsPaginated(ctx context.Context, limit, offset int) ([]domain.Product, *api_errors.APIError) {
+	fmt.Printf("GetProductsPaginated: limit=%d, offset=%d\n", limit, offset)
+	return []domain.Product{}, nil
 }
 
-func GetProductByID(id string) (model.Product, *errors.APIError) {
+func GetProductByID(ctx context.Context, id uuid.UUID) (*domain.Product, *api_errors.APIError) {
 	fmt.Printf("GetProductByID: %s\n", id)
-	return model.Product{}, nil
+	return &domain.Product{}, nil
 }
 
-func UpdateProduct(id string, input model.Product) (model.Product, *errors.APIError) {
-	fmt.Printf("UpdateProduct: %s > %+v \n", id, input)
-	return input, nil
+func UpdateProduct(ctx context.Context, id uuid.UUID, param param.UpdateProductParam) (domain.Product, *api_errors.APIError) {
+	fmt.Printf("UpdateProduct: %s > %+v \n", id, param)
+	return domain.Product{}, nil
 }
 
-func DeleteProduct(id string) *errors.APIError {
+func DeleteProduct(ctx context.Context, id uuid.UUID) *api_errors.APIError {
 	fmt.Printf("DeleteProduct: %s\n", id)
 	return nil
 }
